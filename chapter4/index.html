@@ -13,160 +13,6 @@
       <title>DELTARUNE Chapter 4</title>
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/1e295a49108e716ce8ab7eba0c8dca7d/9326265e4f1b14345a3bdab6f8ffad0e2e7ab3fda920c5f0f095f77359af00aeae22591c5bc4914c84c13d99eb62091d7ce7@main/drweb/chapters.css">
       <script src="jszip.min.js"></script>
-          <script>
-(function() {
-  // Unique IDs to avoid conflicts
-  const GAMEPAD_ID = 'custom-gamepad-panel';
-  const TOGGLE_ID = 'custom-gamepad-toggle';
-
-  // Remove if already exists (prevents duplicates)
-  const existingPanel = document.getElementById(GAMEPAD_ID);
-  if (existingPanel) existingPanel.remove();
-  const existingToggle = document.getElementById(TOGGLE_ID);
-  if (existingToggle) existingToggle.remove();
-
-  // ----- Helper: simulate keyboard events -----
-  function simulateKeyEvent(type, key, keyCode) {
-    const ev = new KeyboardEvent(type, {
-      key: key,
-      keyCode: keyCode,
-      which: keyCode,
-      bubbles: true,
-      cancelable: true
-    });
-    document.dispatchEvent(ev);
-  }
-
-  // ----- Create the toggle button (always visible) -----
-  const toggleBtn = document.createElement('button');
-  toggleBtn.id = TOGGLE_ID;
-  toggleBtn.textContent = '🎮';
-  toggleBtn.style.cssText = `
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 50px;
-    height: 50px;
-    border-radius: 30px;
-    background: #2a2a38;
-    color: white;
-    font-size: 24px;
-    border: none;
-    cursor: pointer;
-    z-index: 1000000;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    transition: transform 0.1s;
-  `;
-  toggleBtn.onmouseenter = () => toggleBtn.style.transform = 'scale(1.05)';
-  toggleBtn.onmouseleave = () => toggleBtn.style.transform = 'scale(1)';
-
-  // ----- Create the gamepad panel (initially hidden) -----
-  const panel = document.createElement('div');
-  panel.id = GAMEPAD_ID;
-  panel.style.cssText = `
-    position: fixed;
-    bottom: 90px;
-    right: 20px;
-    display: none;  /* hidden by default */
-    flex-direction: column;
-    gap: 12px;
-    background: rgba(20,20,30,0.9);
-    backdrop-filter: blur(12px);
-    padding: 16px;
-    border-radius: 28px;
-    border: 1px solid rgba(255,255,255,0.3);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-    z-index: 1000000;
-    pointer-events: auto;
-  `;
-
-  // Button definitions: [label, key, keyCode]
-  const buttons = [
-    ['↑', 'ArrowUp', 38],
-    ['↓', 'ArrowDown', 40],
-    ['←', 'ArrowLeft', 37],
-    ['→', 'ArrowRight', 39],
-    ['Z', 'z', 90],
-    ['X', 'x', 88],
-    ['C', 'c', 67]
-  ];
-
-  // Helper to create a button with press/release events
-  function createGamepadButton(label, key, keyCode) {
-    const btn = document.createElement('button');
-    btn.textContent = label;
-    btn.style.cssText = `
-      width: 60px;
-      height: 60px;
-      border-radius: 30px;
-      border: none;
-      background: linear-gradient(145deg, #3a3a4a, #2a2a38);
-      color: white;
-      font-size: 28px;
-      font-weight: bold;
-      box-shadow: 0 6px 0 #1a1a28;
-      cursor: pointer;
-      transition: all 0.06s ease;
-      user-select: none;
-      margin: 0;
-    `;
-    if (key === 'z') btn.style.background = 'linear-gradient(145deg, #5d4e7a, #4a3b63)';
-    if (key === 'x') btn.style.background = 'linear-gradient(145deg, #7a4e5d, #633b4a)';
-    if (key === 'c') btn.style.background = 'linear-gradient(145deg, #4e7a5d, #3b634a)';
-    
-    const onPress = (e) => {
-      e.preventDefault();
-      simulateKeyEvent('keydown', key, keyCode);
-    };
-    const onRelease = (e) => {
-      e.preventDefault();
-      simulateKeyEvent('keyup', key, keyCode);
-    };
-    btn.addEventListener('pointerdown', onPress);
-    btn.addEventListener('pointerup', onRelease);
-    btn.addEventListener('pointerleave', onRelease);
-    btn.addEventListener('touchstart', (e) => e.preventDefault(), { passive: false });
-    return btn;
-  }
-
-  // Arrange buttons in two rows: first row arrows, second row ZXC
-  const arrowRow = document.createElement('div');
-  arrowRow.style.display = 'flex';
-  arrowRow.style.gap = '12px';
-  arrowRow.style.justifyContent = 'center';
-  const actionRow = document.createElement('div');
-  actionRow.style.display = 'flex';
-  actionRow.style.gap = '12px';
-  actionRow.style.justifyContent = 'center';
-  actionRow.style.marginTop = '8px';
-
-  buttons.forEach(([label, key, code]) => {
-    const btn = createGamepadButton(label, key, code);
-    if (label === '↑' || label === '↓' || label === '←' || label === '→') {
-      arrowRow.appendChild(btn);
-    } else {
-      actionRow.appendChild(btn);
-    }
-  });
-
-  panel.appendChild(arrowRow);
-  panel.appendChild(actionRow);
-
-  // ----- Toggle logic -----
-  let isVisible = false;
-  toggleBtn.onclick = () => {
-    isVisible = !isVisible;
-    panel.style.display = isVisible ? 'flex' : 'none';
-    toggleBtn.style.opacity = isVisible ? '0.7' : '1';
-  };
-
-  // Append to body
-  document.body.appendChild(toggleBtn);
-  document.body.appendChild(panel);
-
-  console.log('✅ Custom gamepad added. Click the 🎮 button to show/hide.');
-})();
-</script>
     </head>
 
   <body>
@@ -1419,5 +1265,159 @@
       })
       .catch(err => console.error("Failed to merge parts:", err));
     </script>
+      <script>
+(function() {
+  // Unique IDs to avoid conflicts
+  const GAMEPAD_ID = 'custom-gamepad-panel';
+  const TOGGLE_ID = 'custom-gamepad-toggle';
+
+  // Remove if already exists (prevents duplicates)
+  const existingPanel = document.getElementById(GAMEPAD_ID);
+  if (existingPanel) existingPanel.remove();
+  const existingToggle = document.getElementById(TOGGLE_ID);
+  if (existingToggle) existingToggle.remove();
+
+  // ----- Helper: simulate keyboard events -----
+  function simulateKeyEvent(type, key, keyCode) {
+    const ev = new KeyboardEvent(type, {
+      key: key,
+      keyCode: keyCode,
+      which: keyCode,
+      bubbles: true,
+      cancelable: true
+    });
+    document.dispatchEvent(ev);
+  }
+
+  // ----- Create the toggle button (always visible) -----
+  const toggleBtn = document.createElement('button');
+  toggleBtn.id = TOGGLE_ID;
+  toggleBtn.textContent = '🎮';
+  toggleBtn.style.cssText = `
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 30px;
+    background: #2a2a38;
+    color: white;
+    font-size: 24px;
+    border: none;
+    cursor: pointer;
+    z-index: 1000000;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    transition: transform 0.1s;
+  `;
+  toggleBtn.onmouseenter = () => toggleBtn.style.transform = 'scale(1.05)';
+  toggleBtn.onmouseleave = () => toggleBtn.style.transform = 'scale(1)';
+
+  // ----- Create the gamepad panel (initially hidden) -----
+  const panel = document.createElement('div');
+  panel.id = GAMEPAD_ID;
+  panel.style.cssText = `
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    display: none;  /* hidden by default */
+    flex-direction: column;
+    gap: 12px;
+    background: rgba(20,20,30,0.9);
+    backdrop-filter: blur(12px);
+    padding: 16px;
+    border-radius: 28px;
+    border: 1px solid rgba(255,255,255,0.3);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    z-index: 1000000;
+    pointer-events: auto;
+  `;
+
+  // Button definitions: [label, key, keyCode]
+  const buttons = [
+    ['↑', 'ArrowUp', 38],
+    ['↓', 'ArrowDown', 40],
+    ['←', 'ArrowLeft', 37],
+    ['→', 'ArrowRight', 39],
+    ['Z', 'z', 90],
+    ['X', 'x', 88],
+    ['C', 'c', 67]
+  ];
+
+  // Helper to create a button with press/release events
+  function createGamepadButton(label, key, keyCode) {
+    const btn = document.createElement('button');
+    btn.textContent = label;
+    btn.style.cssText = `
+      width: 60px;
+      height: 60px;
+      border-radius: 30px;
+      border: none;
+      background: linear-gradient(145deg, #3a3a4a, #2a2a38);
+      color: white;
+      font-size: 28px;
+      font-weight: bold;
+      box-shadow: 0 6px 0 #1a1a28;
+      cursor: pointer;
+      transition: all 0.06s ease;
+      user-select: none;
+      margin: 0;
+    `;
+    if (key === 'z') btn.style.background = 'linear-gradient(145deg, #5d4e7a, #4a3b63)';
+    if (key === 'x') btn.style.background = 'linear-gradient(145deg, #7a4e5d, #633b4a)';
+    if (key === 'c') btn.style.background = 'linear-gradient(145deg, #4e7a5d, #3b634a)';
+    
+    const onPress = (e) => {
+      e.preventDefault();
+      simulateKeyEvent('keydown', key, keyCode);
+    };
+    const onRelease = (e) => {
+      e.preventDefault();
+      simulateKeyEvent('keyup', key, keyCode);
+    };
+    btn.addEventListener('pointerdown', onPress);
+    btn.addEventListener('pointerup', onRelease);
+    btn.addEventListener('pointerleave', onRelease);
+    btn.addEventListener('touchstart', (e) => e.preventDefault(), { passive: false });
+    return btn;
+  }
+
+  // Arrange buttons in two rows: first row arrows, second row ZXC
+  const arrowRow = document.createElement('div');
+  arrowRow.style.display = 'flex';
+  arrowRow.style.gap = '12px';
+  arrowRow.style.justifyContent = 'center';
+  const actionRow = document.createElement('div');
+  actionRow.style.display = 'flex';
+  actionRow.style.gap = '12px';
+  actionRow.style.justifyContent = 'center';
+  actionRow.style.marginTop = '8px';
+
+  buttons.forEach(([label, key, code]) => {
+    const btn = createGamepadButton(label, key, code);
+    if (label === '↑' || label === '↓' || label === '←' || label === '→') {
+      arrowRow.appendChild(btn);
+    } else {
+      actionRow.appendChild(btn);
+    }
+  });
+
+  panel.appendChild(arrowRow);
+  panel.appendChild(actionRow);
+
+  // ----- Toggle logic -----
+  let isVisible = false;
+  toggleBtn.onclick = () => {
+    isVisible = !isVisible;
+    panel.style.display = isVisible ? 'flex' : 'none';
+    toggleBtn.style.opacity = isVisible ? '0.7' : '1';
+  };
+
+  // Append to body
+  document.body.appendChild(toggleBtn);
+  document.body.appendChild(panel);
+
+  console.log('✅ Custom gamepad added. Click the 🎮 button to show/hide.');
+})();
+</script>
 </body>
 </html>
